@@ -15,3 +15,5 @@ myPass.set_include_string_position('*') # Set it to a random position
 myPass.print_properties() # Print properties
 myPass.print_password() # Print the final password
 myPass.print_passlogs('*') # Print all generated passwords
+
+end() # End the program
