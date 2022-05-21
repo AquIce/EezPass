@@ -192,5 +192,6 @@ class EezPass:
             file.write('Error [' + str(code) + '] (' + self.ERRORS[code].replace('\n', ' ') + ') raised\n\n')
         print(self.ERRORS[code])
         quit()
-        
-# Code by Lil_Tim_0
+
+def end():
+    input('Press enter to continue...')
