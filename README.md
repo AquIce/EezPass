@@ -96,6 +96,11 @@ myPass.print_passlogs(<index>)
 ```
 The index can be a number or '*'. In that case, it will print all the generated passwords
 
+- End the programm<br>
+There is a function called *end()* who is called at the end of the programm 
+```py
+end()
+```
 ***
   
 ### Code example
