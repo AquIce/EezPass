@@ -20,7 +20,7 @@ class EezPass:
         self.logs = 'eezpass'
         self.password = ['a'] * self.length
         self.logged = False
-        self.logFiles = 'default.log'
+        self.logFiles = 'default'
 
         self.ALPHA = 'abcdefghijklmnopqrstuvwxyz'
         self.MAJ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
