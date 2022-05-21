@@ -17,23 +17,21 @@ class EezPass:
         self.includeString = False
         self.pos = 0
         self.passwordLogs = 'passwords'
-        self.logs = 'eezpass'
+        self.logs = 'default'
         self.password = ['a'] * self.length
         self.logged = False
-        self.logFiles = 'default'
+        self.logFiles = 'default.log'
 
         self.ALPHA = 'abcdefghijklmnopqrstuvwxyz'
         self.MAJ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         self.NUM = '0123456789'
         self.SPECIAL = ',.-;:_^![]{}+"*ç%&/()=?'
 
-        self.ERRORS = ('SYSTEM.GENERAL.FAILURE', '! ERROR !\n<invalid_index> in pos (value passed with \'set_include_string_position\' or the input of \'include_string\')', '! ERROR !\n<invalid_admin_password>')
+        self.ERRORS = ('SYSTEM.GENERAL.FAILURE', '! ERROR !\n<invalid_index> in pos (value passed with \'set_include_string_position\' or the input of \'include_string\')', '! ERROR !\n<invalid_admin_password>', '! ERROR !\n<invalid_charsets>')
 
     def set_length(self, min_length):
         if self.logged:
             self.length = min_length
-            with open(self.logFiles, 'a') as file:
-                file.write('Logged as ADMIN\n')
         else:
             p = input('What is the password ? ')
             if p == self.admin_password:
@@ -51,16 +49,17 @@ class EezPass:
     def set_charsets(self, charsets):
         if self.logged:
             self.charsets = charsets
-            with open(self.logFiles, 'a') as file:
-                file.write('Logged as ADMIN\n')
         else:
             p = input('What is the password ? ')
             if p == self.admin_password:
                 self.logged = True
             if self.logged:
-                self.charsets = charsets
-                with open(self.logFiles, 'a') as file:
-                    file.write('Logged as ADMIN\n')
+                if len(charsets.replace('a', '').replace('m', '').replace('n', '').replace('s', '')) != 0:
+                    self.ERROR(3)
+                else:
+                    self.charsets = charsets
+                    with open(self.logFiles, 'a') as file:
+                        file.write('Logged as ADMIN\n')
             else:
                 with open(self.logFiles, 'a') as file:
                     file.write('Logging as ADMIN failed with password \'' + p + '\'\n')
@@ -72,8 +71,21 @@ class EezPass:
 
     def print_properties(self):
         properties = self.get_properties()
-        print('Minimum length : ', properties[0])
-        print('Enabled charsets : ', properties[1])
+        print('Password length : ', properties[0])
+        prop = []
+        for i in properties[1]:
+            if i == 'a':
+                prop.append('Lower letters')
+            elif i == 'm':
+                prop.append('Upper letters')
+            elif i == 'n':
+                prop.append('Numbers')
+            else:
+                prop.append('Special characters')
+
+        props = ', '.join(prop).capitalize()
+
+        print('Enabled charsets : ', props)
         with open(self.logFiles, 'a') as file:
             file.write('Properties printed\n')
 
@@ -126,8 +138,6 @@ class EezPass:
         if trueOrFalse:
             self.includeString = True
             self.stringToInclude = input('Which string do you want to include ? ')
-            print(len(self.stringToInclude))
-            print(len(self.password))
             if len(self.password) - len(self.stringToInclude) >= 0 :
                 self.pos = random.randint(0, len(self.password) - len(self.stringToInclude))
                 with open(self.logFiles, 'a') as file:
@@ -141,7 +151,9 @@ class EezPass:
                 file.write('Include string turned to False\n')
 
     def set_include_string_position(self, position):
-        if position <= len(self.password):
+        if position == '*':
+            self.pos = random.randint(0, len(self.password)- len(self.stringToInclude))
+        elif position <= len(self.password):
             self.pos = position
             with open(self.logFiles, 'a') as file:
                 file.write('String include position set to ' + str(self.pos) + '\n')
@@ -165,8 +177,20 @@ class EezPass:
                 time = datetime.datetime.now()
                 file.write('LOGS DISABLED at [' + str(time) + ']\n')
 
+
+    def print_passlogs(self, index):
+        with open(self.passwordLogs + '.log', 'r') as file:
+            passwords = file.readlines()
+        if index == '*':
+            for i in passwords:
+                print(i, end='')
+        else:
+            print(passwords[index])
+
     def ERROR(self, code):
         with open(self.logFiles, 'a') as file:
             file.write('Error [' + str(code) + '] (' + self.ERRORS[code].replace('\n', ' ') + ') raised\n\n')
         print(self.ERRORS[code])
         quit()
+        
+# Code by Lil_Tim_0
