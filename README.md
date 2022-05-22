@@ -4,7 +4,7 @@ EezPass is a really personalisable random password generator
 
 ### Importation
 
-  To import **EezPass**, you just have put the *eezpass.py* file in the same folder as your code file.<br>
+  To import **EezPass**, you just have move the *eezpass.py* file in the same folder as your code file.<br>
   ![image](https://user-images.githubusercontent.com/99663083/169581649-4f57038f-2621-4d2e-81df-6937fcb72dec.png)
 
   After you have checked that, use the **from ... import ...** command by adding the following line on top of your code :
